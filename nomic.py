@@ -27,44 +27,56 @@ with open('players.players', 'r') as players_file:
 		else:
 			players_text_new.append(scores[i//2])
 
-
 with open('players.players', 'w') as players_file:
 	players_file.write("".join(players_text_new))
 
 # RULE 102
 # self modify according to input
-rule_change = input('Enter the name of a .txt file starting with "# RULE XXX" \
-(where XXX is a number) to replace that rule: ')
 
-new_rule = ""
-new_nomic = ""
-tag = ""
-if rule_change[-4:] == '.txt':
-	# do stuff with file
-	with open(rule_change) as change_file:
-		for i, line in enumerate(change_file):
-			if i == 0:
-				if line[:8] == '# RULE 2':
-					tag = line
-				else:
-					print('file doesn\'t start with rule definition, no go.')
-					break
-			else: 
-				new_rule += line
+def get_changefile():
+	changefile_name = input('Enter the name of a .txt file starting with "# RULE 2XX" \
+(where 2XX is a number starting with 2) to replace that rule: ')
+
+	if changefile_name[-4:] == '.txt':
+		print('bad filename, sorry')
+		return
+
+	with open(changefile_name) as changefile:
+		first_line = changefile.readline()
+
+		if first_line[:8] != '# RULE 2':
+			print('file doesn\'t start with rule definition for rule 200-299, no go.')
+			return
+
+	return changefile_name
+
+
+def apply_change(changefile_name):
+	new_nomic = ''
+	with open(changefile_name) as changefile:
+		header = changefile.readline()
+		body = changefile.read()
+
 	with open('nomic.py') as nomic:
-		inside_tag = False
+		inside_to_be_replaced = False
 		has_replaced_rule = False
 		for line in nomic:
-			if line == tag:
-				inside_tag, has_replaced_rule = True, True
-				new_nomic += tag + new_rule
+			if line == header:
+				inside_to_be_replaced, has_replaced_rule = True, True
+				new_nomic += header + body
 			elif inside_tag:
 				if line[:8] == '# RULE 2':
-					inside_tag = False
+					inside_to_be_replaced = False
 			else:
 				new_rule += line
 		if not has_replaced_rule:
-			new_nomic += tag + new_rule
+			new_nomic += header + body
+
+changefile_name = get_changefile()
+
+if changefile_name:
+	apply_change(changefile_name)
 else:
 	print('bad command, sorry, next player.')
 
+print(next_player)
