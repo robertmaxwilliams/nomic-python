@@ -39,7 +39,7 @@ def get_changefile():
 		print('bad filename, sorry')
 		return
 
-	if !os.path.exists(path):
+	if not os.path.exists(path):
 		print('file not found')
 		return
 
