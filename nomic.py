@@ -84,4 +84,5 @@ if changefile_name:
 else:
 	print('bad command, sorry, next player.')
 
+# RULE 103
 print(next_player)
