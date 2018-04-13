@@ -74,7 +74,7 @@ def apply_change(changefile_name):
 		if not has_replaced_rule:
 			new_nomic += header + body
 
-	with open('out.py', 'w') as nomic:
+	with open('nomic.py', 'w') as nomic:
 		nomic.write(new_nomic)
 
 changefile_name = get_changefile()
