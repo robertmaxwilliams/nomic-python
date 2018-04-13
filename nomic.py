@@ -1,11 +1,11 @@
 from __future__ import division
 from __future__ import print_function
 
-# RULE 101
+# RULE 100
 from random import randint as dice
-# player.players has names on even index lines, followed by scores
-# A player's name is proceeded by a '*' when it is their turn
+import os
 
+# RULE 101
 with open('players.players', 'r') as players_file:
 	players_text = list(players_file)
 	players = players_text[::2]
@@ -31,14 +31,16 @@ with open('players.players', 'w') as players_file:
 	players_file.write("".join(players_text_new))
 
 # RULE 102
-# self modify according to input
-
 def get_changefile():
 	changefile_name = input('Enter the name of a .txt file starting with "# RULE 2XX" \
 (where 2XX is a number starting with 2) to replace that rule: ')
 
-	if changefile_name[-4:] == '.txt':
+	if changefile_name[-4:] != '.txt':
 		print('bad filename, sorry')
+		return
+
+	if !os.path.exists(path):
+		print('file not found')
 		return
 
 	with open(changefile_name) as changefile:
@@ -64,13 +66,16 @@ def apply_change(changefile_name):
 			if line == header:
 				inside_to_be_replaced, has_replaced_rule = True, True
 				new_nomic += header + body
-			elif inside_tag:
+			elif inside_to_be_replaced:
 				if line[:8] == '# RULE 2':
 					inside_to_be_replaced = False
 			else:
-				new_rule += line
+				new_nomic += line
 		if not has_replaced_rule:
 			new_nomic += header + body
+
+	with open('out.py', 'w') as nomic:
+		nomic.write(new_nomic)
 
 changefile_name = get_changefile()
 
